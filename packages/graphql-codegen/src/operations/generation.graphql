@@ -1,0 +1,84 @@
+query GetGenerationTask($id: ID!) {
+  generationTask(id: $id) {
+    id
+    userId
+    prompt
+    negativePrompt
+    type
+    modelId
+    status
+    priorityTier
+    progressPct
+    currentStep
+    totalSteps
+    previewUrl
+    finalMediaUrl
+    durationMs
+    errorReason
+    createdAt
+    completedAt
+  }
+}
+
+query GetRecentTasks($limit: Int, $status: TaskStatus) {
+  recentTasks(limit: $limit, status: $status) {
+    id
+    prompt
+    type
+    status
+    priorityTier
+    progressPct
+    previewUrl
+    finalMediaUrl
+    createdAt
+  }
+}
+
+query GetSystemMetrics {
+  systemMetrics {
+    totalWorkers
+    activeInferring
+    queueDepthVip
+    queueDepthBatch
+    averageLatencyMs
+    costEfficiencyRatio
+  }
+}
+
+mutation CreateGeneration($input: CreateGenerationInput!) {
+  createGeneration(input: $input) {
+    id
+    status
+    priorityTier
+    currentStep
+    totalSteps
+    createdAt
+  }
+}
+
+mutation CancelGeneration($id: ID!) {
+  cancelGeneration(id: $id)
+}
+
+subscription OnGenerationProgress($taskId: ID!) {
+  generationProgress(taskId: $taskId) {
+    taskId
+    status
+    progressPct
+    currentStep
+    totalSteps
+    previewUrl
+    etaSeconds
+  }
+}
+
+subscription OnMetricsStream {
+  metricsStream {
+    totalWorkers
+    activeInferring
+    queueDepthVip
+    queueDepthBatch
+    averageLatencyMs
+    costEfficiencyRatio
+  }
+}

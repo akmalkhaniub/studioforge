@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "StudioForge Mobile",
+    "slug": "studioforge-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#090a0f"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ai.studioforge.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#090a0f"
+      },
+      "package": "ai.studioforge.mobile"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "studioforge"
+  }
+}

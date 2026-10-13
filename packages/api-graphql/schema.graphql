@@ -1,0 +1,93 @@
+"""
+StudioForge — GenAI Studio & Media Generation GraphQL Schema (2026)
+Optimized for Apollo Client 3.12+, gqlgen Go server, and real-time generation streaming.
+"""
+
+enum GenerationType {
+  IMAGE_TEXT_TO_IMAGE
+  IMAGE_TO_IMAGE
+  VIDEO_TEXT_TO_VIDEO
+  VIDEO_INTERPOLATION
+}
+
+enum TaskStatus {
+  QUEUED
+  IN_PROGRESS
+  TRANSCODING
+  COMPLETED
+  FAILED
+}
+
+type GenerationTask {
+  id: ID!
+  userId: String!
+  prompt: String!
+  negativePrompt: String
+  type: GenerationType!
+  modelId: String!
+  status: TaskStatus!
+  priorityTier: String!
+  progressPct: Int!
+  currentStep: Int!
+  totalSteps: Int!
+  previewUrl: String
+  finalMediaUrl: String
+  durationMs: Int
+  errorReason: String
+  createdAt: String!
+  completedAt: String
+}
+
+type GenerationProgressUpdate {
+  taskId: ID!
+  status: TaskStatus!
+  progressPct: Int!
+  currentStep: Int!
+  totalSteps: Int!
+  previewUrl: String
+  etaSeconds: Float
+}
+
+type WorkerMetrics {
+  totalWorkers: Int!
+  activeInferring: Int!
+  queueDepthVip: Int!
+  queueDepthBatch: Int!
+  averageLatencyMs: Float!
+  costEfficiencyRatio: Float!
+}
+
+input CreateGenerationInput {
+  prompt: String!
+  negativePrompt: String
+  type: GenerationType!
+  modelId: String!
+  steps: Int = 30
+  width: Int = 1024
+  height: Int = 1024
+  fps: Int = 30
+}
+
+type Query {
+  generationTask(id: ID!): GenerationTask
+  recentTasks(limit: Int = 20, status: TaskStatus): [GenerationTask!]!
+  systemMetrics: WorkerMetrics!
+}
+
+type Mutation {
+  createGeneration(input: CreateGenerationInput!): GenerationTask!
+  cancelGeneration(id: ID!): Boolean!
+  retryFailedTask(taskId: ID!): GenerationTask!
+}
+
+type Subscription {
+  """
+  Real-time frame-by-frame progress updates for an active generation job
+  """
+  generationProgress(taskId: ID!): GenerationProgressUpdate!
+
+  """
+  Live system-level GPU cluster and queue metrics emitted every 1,500ms
+  """
+  metricsStream: WorkerMetrics!
+}

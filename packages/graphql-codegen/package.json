@@ -1,0 +1,29 @@
+{
+  "name": "@studioforge/graphql-codegen",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "codegen": "graphql-codegen --config codegen.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.12.11",
+    "graphql": "^16.10.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/typescript": "^4.1.4",
+    "@graphql-codegen/typescript-operations": "^4.4.1",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
+    "typescript": "~5.7.3"
+  }
+}

@@ -1,0 +1,75 @@
+asyncapi: 3.0.0
+info:
+  title: StudioForge Queue & Pipeline AsyncAPI Contract
+  version: 1.0.0
+  description: High-throughput event contracts for Redis 7.4 Streams and Go GPU Worker orchestration.
+
+channels:
+  streamTasksVip:
+    address: 'stream:tasks:vip'
+    messages:
+      generationTaskSubmitted:
+        $ref: '#/components/messages/GenerationTaskMessage'
+  streamTasksBatch:
+    address: 'stream:tasks:batch'
+    messages:
+      generationTaskSubmitted:
+        $ref: '#/components/messages/GenerationTaskMessage'
+  streamTasksDlq:
+    address: 'stream:tasks:dlq'
+    messages:
+      generationTaskFailed:
+        $ref: '#/components/messages/GenerationTaskMessage'
+
+components:
+  messages:
+    GenerationTaskMessage:
+      name: GenerationTaskMessage
+      title: Generation Task Payload
+      summary: Dispatched to worker pools for GPU execution and FFmpeg assembly.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - taskId
+          - prompt
+          - genType
+          - modelId
+          - steps
+          - width
+          - height
+          - priority
+        properties:
+          taskId:
+            type: string
+            format: uuid
+          userId:
+            type: string
+          prompt:
+            type: string
+          negativePrompt:
+            type: string
+          genType:
+            type: string
+            enum: ['IMAGE_TEXT_TO_IMAGE', 'IMAGE_TO_IMAGE', 'VIDEO_TEXT_TO_VIDEO', 'VIDEO_INTERPOLATION']
+          modelId:
+            type: string
+          steps:
+            type: integer
+            minimum: 1
+            maximum: 150
+          width:
+            type: integer
+          height:
+            type: integer
+          fps:
+            type: integer
+          priority:
+            type: string
+            enum: ['VIP', 'STANDARD', 'BATCH']
+          retryCount:
+            type: integer
+            default: 0
+          submittedAt:
+            type: string
+            format: date-time

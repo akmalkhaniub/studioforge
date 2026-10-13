@@ -1,0 +1,10 @@
+{
+  "name": "@studioforge/api-graphql",
+  "version": "1.0.0",
+  "private": true,
+  "main": "schema.graphql",
+  "files": [
+    "schema.graphql",
+    "asyncapi.yaml"
+  ]
+}
